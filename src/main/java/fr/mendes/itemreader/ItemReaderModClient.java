@@ -25,6 +25,7 @@ import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.util.Strings;
 import org.lwjgl.glfw.GLFW;
 
@@ -51,7 +52,7 @@ public class ItemReaderModClient implements ClientModInitializer {
                 "key.itemreader.get_item_text",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_G,
-                "category.itemreader.general"
+                KeyBinding.Category.create(Identifier.of("itemreader", "general"))
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -82,8 +83,8 @@ public class ItemReaderModClient implements ClientModInitializer {
                 return; // only register on container screens
             }
 
-            ScreenKeyboardEvents.afterKeyPress(screen).register((s, key, scancode, modifiers) -> {
-                if (key != GLFW.GLFW_KEY_Z) return;
+            ScreenKeyboardEvents.afterKeyPress(screen).register((s, keyInput) -> {
+                if (keyInput.key() != GLFW.GLFW_KEY_Z) return;
                 if (client.player == null) return;
 
                 ScreenHandler handler;
@@ -128,9 +129,7 @@ public class ItemReaderModClient implements ClientModInitializer {
 
                         MutableText clickable = Text.literal(label)
                                 .setStyle(Style.EMPTY
-                                        .withClickEvent(new ClickEvent(
-                                                ClickEvent.Action.COPY_TO_CLIPBOARD,
-                                                jsonString))
+                                        .withClickEvent(new ClickEvent.CopyToClipboard(jsonString))
                                         .withUnderline(true));
 
                         MutableText line = Text.literal("  ")
