@@ -25,9 +25,6 @@
 			"fr.mendes.itemreader.ItemReaderModClient"
 		]
 	},
-	"mixins": [
-		"itemreader.mixins.json"
-	],
 	"depends": {
 		"fabricloader": ">=0.7.0",
 		"minecraft": "~1.21.10",
